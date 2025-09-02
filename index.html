@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TypeSprint: Test Your Speed & Accuracy</title>
+    <style>
+        body {
+            background-image: url("{{ url_for('static', filename='outer-space-cosmos-stars-background-600nw-2153688383.webp') }}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            text-align: center;
+        }
+        .header-container {
+            background-color: #E03E00;
+            padding: 10px;
+        }
+        .title {
+            font-size: 36px;
+            color: white;
+            margin: 0;
+        }
+        .subtitle {
+            font-size: 24px;
+            color: white;
+            background-color: #0a0a0a;
+            padding: 10px;
+            margin-top: 0;
+        }
+        .game-container {
+            width: 800px;
+            height: 500px;
+            background-color: gray;
+            margin: 20px auto;
+            position: relative;
+            overflow: hidden;
+        }
+        .static-image {
+            position: absolute;
+            width: 120%;
+            height: 120%;
+            object-fit: cover;
+            bottom: 0;
+            left: 0;
+            transform: none;
+        }
+        .button {
+            font-size: 24px;
+            padding: 15px 30px;
+            background-color: #FF4500;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .button:hover {
+            background-color: #E03E00;
+        }
+        .music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(0,0,0,0.7);
+            padding: 10px;
+            border-radius: 5px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-container">
+        <h1 class="title">Space Typing: Test Your Speed & Accuracy!</h1>
+    </div>
+    <p class="subtitle">Test your typing speed and accuracy! Click 'Start' to begin.</p>
+    
+    <div class="game-container">
+        <img class="static-image" src="{{ url_for('static', filename='f84de06c4b734f8d8ad45646a033c4cc.gif') }}" alt="Typing Animation GIF">
+    </div>
+
+    <!-- Redirects to /game when clicked -->
+    <button class="button" onclick="window.location.href='/game'">Start Game</button>
+
+    <div class="music-control">
+        <button id="toggleMusic">Toggle Music</button>
+        <button id="stopMusic">Stop Music</button>
+    </div>
+
+    <script>
+        // Load the menu music
+        let menuMusic = new Audio("{{ url_for('static', filename='01. Pocket Tanks (Main Menu).mp3') }}");
+        menuMusic.loop = true;
+        
+        // Play music when page loads (autoplay might be blocked by browser)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Try to play music, but catch potential autoplay block
+            menuMusic.play().catch(error => {
+                console.log("Autoplay was prevented. User needs to interact first.");
+            });
+        });
+        
+        // Music control buttons
+        document.getElementById('toggleMusic').addEventListener('click', function() {
+            if (menuMusic.paused) {
+                menuMusic.play();
+            } else {
+                menuMusic.pause();
+            }
+        });
+        
+        document.getElementById('stopMusic').addEventListener('click', function() {
+            menuMusic.pause();
+            menuMusic.currentTime = 0;
+        });
+    </script>
+</body>
+</html> 
