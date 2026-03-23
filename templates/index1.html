@@ -146,8 +146,16 @@
         <button class="hard" onclick="startGame('hard')">Hard</button>
     </div>
     <div id="game-over-container" class="game-over-container">
-        <h1 style="color: red;">GAME OVER</h1>
-        <p id="final-score" style="color: white; margin-bottom: 10px; font-size: 40px;"></p>
+        <h1 style="color: red; text-shadow: 0 0 10px red;">GAME OVER</h1>
+        <p id="final-score" style="color: white; margin-bottom: 10px; font-size: 30px;"></p>
+        
+        <div id="leaderboard-section" style="width: 100%; margin-top: 15px; margin-bottom: 15px; text-align: left; background: rgba(0,0,0,0.6); padding: 10px; border-radius: 8px;">
+            <h3 style="margin: 0 0 10px 0; color: #FFD700; text-align: center; text-shadow: 0 0 5px #FFD700;">Top Scores</h3>
+            <ol id="leaderboard-list" style="margin: 0; padding-left: 20px; color: white; font-size: 18px;">
+                <li>Loading...</li>
+            </ol>
+        </div>
+
         <div class="game-over-buttons">
             <button class="try-again" onclick="restartGame()">Try Again</button>
             <button class="exit" onclick="exitGame()">Exit</button>
@@ -164,6 +172,7 @@
         let rocketFlames;
         let rocketX;
         let gameOver = false;
+        let scoreSubmitted = false;
         let timer = 60;
         let timerInterval;
         let wordSpawnRate = 5000;
@@ -250,6 +259,7 @@
             score = 0;
             lives = 5;
             gameOver = false;
+            scoreSubmitted = false;
             timer = 60;
             userInput = "";
 
@@ -279,17 +289,43 @@
             noStroke();
 
             if (gameOver) {
-                clearInterval(timerInterval);
-                document.getElementById("game-over-container").style.display = "flex";
-                document.getElementById("final-score").innerText = `Your Score: ${score}`;
-                
-                // Play game over sound (only once)
-                if (currentAudio !== gameOverSound) {
-                    if (currentAudio) {
-                        currentAudio.stop();
+                if (!scoreSubmitted) {
+                    scoreSubmitted = true;
+                    clearInterval(timerInterval);
+                    
+                    document.getElementById("game-over-container").style.display = "flex";
+                    document.getElementById("final-score").innerText = `Your Score: ${score}`;
+                    
+                    // Submit score and fetch leaderboard
+                    fetch('/submit_score', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ score: score })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        let lbList = document.getElementById("leaderboard-list");
+                        lbList.innerHTML = '';
+                        if(data.scores && data.scores.length > 0) {
+                            data.scores.forEach(s => {
+                                let li = document.createElement('li');
+                                li.innerText = `${s.name}: ${s.score}`;
+                                lbList.appendChild(li);
+                            });
+                        } else {
+                            lbList.innerHTML = '<li>No scores yet!</li>';
+                        }
+                    })
+                    .catch(err => console.error("Leaderboard error:", err));
+                    
+                    // Play game over sound
+                    if (currentAudio !== gameOverSound) {
+                        if (currentAudio) {
+                            currentAudio.stop();
+                        }
+                        gameOverSound.play();
+                        currentAudio = gameOverSound;
                     }
-                    gameOverSound.play();
-                    currentAudio = gameOverSound;
                 }
                 return;
             }
@@ -311,7 +347,27 @@
             
             for (let i = words.length - 1; i >= 0; i--) {
                 words[i].y += speed;
-                text(words[i].text, words[i].x, words[i].y);
+                
+                let wordText = words[i].text;
+                drawingContext.shadowBlur = 8;
+                drawingContext.shadowColor = 'white';
+                
+                if (userInput.length > 0 && wordText.toLowerCase().startsWith(userInput.toLowerCase())) {
+                    let typedPart = wordText.substring(0, userInput.length);
+                    let restPart = wordText.substring(userInput.length);
+                    
+                    fill(0, 255, 0);
+                    drawingContext.shadowColor = 'lime';
+                    text(typedPart, words[i].x, words[i].y);
+                    
+                    fill(255);
+                    drawingContext.shadowColor = 'white';
+                    text(restPart, words[i].x + textWidth(typedPart), words[i].y);
+                } else {
+                    fill(255);
+                    text(wordText, words[i].x, words[i].y);
+                }
+                drawingContext.shadowBlur = 0;
                 
                 if (words[i].y > borderY) {
                     words.splice(i, 1);
@@ -325,18 +381,25 @@
             
             for (let i = lasers.length - 1; i >= 0; i--) {
                 stroke(255, 0, 0);
-                strokeWeight(3);
+                strokeWeight(4);
+                drawingContext.shadowBlur = 15;
+                drawingContext.shadowColor = 'red';
                 line(lasers[i].x1, lasers[i].y1, lasers[i].x2, lasers[i].y2);
                 strokeWeight(1);
+                drawingContext.shadowBlur = 0;
                 lasers[i].lifetime--;
                 if (lasers[i].lifetime <= 0) lasers.splice(i, 1);
             }
             
             for (let i = explosions.length - 1; i >= 0; i--) {
+                drawingContext.shadowBlur = 20;
+                drawingContext.shadowColor = 'orange';
                 fill(255, 165, 0, explosions[i].lifetime * 12);
                 circle(explosions[i].x, explosions[i].y, 50);
+                drawingContext.shadowColor = 'red';
                 fill(255, 0, 0, explosions[i].lifetime * 12);
                 circle(explosions[i].x, explosions[i].y, 30);
+                drawingContext.shadowBlur = 0;
                 explosions[i].lifetime--;
                 if (explosions[i].lifetime <= 0) explosions.splice(i, 1);
             }

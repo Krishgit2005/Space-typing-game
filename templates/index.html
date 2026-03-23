@@ -129,8 +129,15 @@
         <img class="static-image" src="{{ url_for('static', filename='f84de06c4b734f8d8ad45646a033c4cc.gif') }}" alt="Typing Animation GIF">
     </div>
 
-    <!-- Redirects to /game when clicked -->
-    <button class="button" onclick="window.location.href='/game'">Start Game</button>
+    <!-- Conditional rendering based on Auth Session -->
+    {% if session.get('user_id') %}
+        <p class="subtitle" style="background-color: transparent; margin-bottom: 5px; color: #FFD700;">Welcome, {{ session['username'] }}!</p>
+        <button class="button" onclick="window.location.href='/game'">Start Game</button>
+        <button class="button" onclick="window.location.href='/logout'" style="background-color: #555; margin-left: 10px;">Logout</button>
+    {% else %}
+        <button class="button" onclick="window.location.href='/login'" style="background-color: #4CAF50;">Login</button>
+        <button class="button" onclick="window.location.href='/register'" style="background-color: #008CBA; margin-left: 10px;">Register</button>
+    {% endif %}
 
     <div class="music-control">
         <button id="toggleMusic">Toggle Music</button>
