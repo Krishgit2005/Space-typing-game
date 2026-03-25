@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TypeSprint: Test Your Speed & Accuracy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
             display: flex;
@@ -13,57 +14,75 @@
             min-height: 100vh;
             margin: 0;
             padding: 0;
-            background-image: url("{{ url_for('static', filename='outer-space-cosmos-stars-background-600nw-2153688383.webp') }}");
+            background-color: #0b0c10;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(0, 242, 254, 0.15), transparent 40%),
+                radial-gradient(circle at 85% 30%, rgba(255, 69, 0, 0.15), transparent 40%),
+                url("{{ url_for('static', filename='outer-space-cosmos-stars-background-600nw-2153688383.webp') }}");
             background-size: cover;
             background-position: center;
-            background-repeat: no-repeat;
+            background-attachment: fixed;
             color: #fff;
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', sans-serif;
             text-align: center;
-            text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
         }
         body::before {
             content: "";
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.45);
+            background: rgba(10, 10, 18, 0.6);
+            backdrop-filter: blur(4px);
             z-index: 0;
             pointer-events: none;
         }
         .header-container {
-            background-color: rgba(224, 62, 0, 0.92);
-            padding: 14px 20px;
+            background: rgba(30, 30, 40, 0.3);
+            backdrop-filter: blur(12px);
+            border-bottom: 2px solid rgba(0, 242, 254, 0.3);
+            box-shadow: 0 4px 30px rgba(0, 242, 254, 0.15);
+            padding: 24px 20px;
             width: 100%;
-            max-width: 980px;
-            box-sizing: border-box;
             z-index: 1;
         }
         .title {
-            font-size: clamp(28px, 4vw, 42px);
-            color: white;
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(32px, 5vw, 48px);
+            color: #fff;
             margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px #00f2fe, 0 0 20px #00f2fe, 0 0 40px #00f2fe;
         }
         .subtitle {
-            font-size: clamp(18px, 2.2vw, 26px);
-            color: white;
-            background-color: rgba(10, 10, 10, 0.75);
-            padding: 12px 16px;
-            margin: 12px auto 0;
-            max-width: 900px;
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(16px, 2vw, 22px);
+            color: #ddd;
+            background: rgba(20, 20, 30, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 12px 24px;
+            margin: 24px auto 0;
             border-radius: 12px;
             z-index: 1;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            letter-spacing: 0.5px;
         }
         .game-container {
             width: min(880px, 90vw);
-            height: min(540px, 60vh);
-            background-color: rgba(0, 0, 0, 0.55);
-            margin: 20px auto;
+            height: min(480px, 55vh);
+            background: rgba(0, 0, 0, 0.6);
+            margin: 30px auto;
             position: relative;
             overflow: hidden;
-            border: 2px solid rgba(255, 255, 255, 0.35);
-            border-radius: 18px;
-            box-shadow: 0 14px 35px rgba(0, 0, 0, 0.65);
+            border: 2px solid rgba(0, 242, 254, 0.4);
+            border-radius: 20px;
+            box-shadow: 0 0 25px rgba(0, 242, 254, 0.25), inset 0 0 15px rgba(0, 242, 254, 0.1);
             z-index: 1;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .game-container:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 40px rgba(0, 242, 254, 0.4), inset 0 0 25px rgba(0, 242, 254, 0.2);
         }
         .static-image {
             position: absolute;
@@ -72,58 +91,76 @@
             object-fit: cover;
             bottom: 0;
             left: 0;
-            transform: none;
-            opacity: 0.9;
+            opacity: 0.85;
+            mix-blend-mode: screen;
+            filter: contrast(1.1) brightness(0.9);
         }
         .button {
-            font-size: 22px;
-            padding: 14px 28px;
-            background-color: #FF4500;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
             color: white;
-            border: 2px solid rgba(255, 255, 255, 0.65);
-            border-radius: 14px;
+            border: none;
+            border-radius: 12px;
             cursor: pointer;
             margin-top: 16px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-            transition: transform 0.15s ease, background-color 0.15s ease;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+            transition: all 0.2s ease;
             z-index: 1;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
         }
+        .btn-green { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); box-shadow: 0 0 15px rgba(56, 239, 125, 0.4); }
+        .btn-gray { background: linear-gradient(135deg, #434343 0%, #000000 100%); box-shadow: 0 0 15px rgba(67, 67, 67, 0.4); border: 1px solid #444; }
+        .btn-blue { background: linear-gradient(135deg, #3a7bd5 0%, #3a6073 100%); box-shadow: 0 0 15px rgba(58, 123, 213, 0.4); }
+        
         .button:hover {
-            background-color: #E03E00;
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.3), 0 0 15px inherit;
         }
         .button:active {
             transform: translateY(1px);
         }
         .music-control {
             position: fixed;
-            bottom: 18px;
-            right: 18px;
-            background-color: rgba(0, 0, 0, 0.75);
-            padding: 10px 12px;
-            border-radius: 10px;
-            color: white;
+            bottom: 25px;
+            right: 25px;
+            background: rgba(20, 20, 30, 0.5);
+            backdrop-filter: blur(12px);
+            padding: 12px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
             z-index: 1;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
         }
         .music-control button {
-            border: 1px solid rgba(255, 255, 255, 0.35);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             background: rgba(0, 0, 0, 0.4);
-            padding: 6px 10px;
+            padding: 8px 16px;
             border-radius: 8px;
             margin: 0 4px;
+            color: #ccc;
             cursor: pointer;
-            transition: background 0.15s ease;
+            transition: all 0.2s ease;
         }
         .music-control button:hover {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(0, 242, 254, 0.15);
+            color: #fff;
+            border-color: rgba(0, 242, 254, 0.5);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
         }
     </style>
 </head>
 <body>
     <div class="header-container">
-        <h1 class="title">Space Typing: Test Your Speed & Accuracy!</h1>
+        <h1 class="title">Space Typing</h1>
     </div>
-    <p class="subtitle">Test your typing speed and accuracy! Click 'Start' to begin.</p>
+    <p class="subtitle">Test your typing speed & accuracy! Click 'Start' to begin.</p>
     
     <div class="game-container">
         <img class="static-image" src="{{ url_for('static', filename='f84de06c4b734f8d8ad45646a033c4cc.gif') }}" alt="Typing Animation GIF">
@@ -131,12 +168,12 @@
 
     <!-- Conditional rendering based on Auth Session -->
     {% if session.get('user_id') %}
-        <p class="subtitle" style="background-color: transparent; margin-bottom: 5px; color: #FFD700;">Welcome, {{ session['username'] }}!</p>
+        <p class="subtitle" style="background: transparent; border: none; box-shadow: none; margin-bottom: 5px; color: #00f2fe; text-shadow: 0 0 10px #00f2fe;">Welcome, {{ session['username'] }}!</p>
         <button class="button" onclick="window.location.href='/game'">Start Game</button>
-        <button class="button" onclick="window.location.href='/logout'" style="background-color: #555; margin-left: 10px;">Logout</button>
+        <button class="button btn-gray" onclick="window.location.href='/logout'" style="margin-left: 10px;">Logout</button>
     {% else %}
-        <button class="button" onclick="window.location.href='/login'" style="background-color: #4CAF50;">Login</button>
-        <button class="button" onclick="window.location.href='/register'" style="background-color: #008CBA; margin-left: 10px;">Register</button>
+        <button class="button btn-green" onclick="window.location.href='/login'">Login</button>
+        <button class="button btn-blue" onclick="window.location.href='/register'" style="margin-left: 10px;">Register</button>
     {% endif %}
 
     <div class="music-control">
