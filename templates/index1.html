@@ -41,7 +41,8 @@
             z-index: 0;
             pointer-events: none;
         }
-        canvas {
+        #p5-game-canvas {
+            position: relative;
             display: block;
             margin: 0 auto;
             border-radius: 20px;
@@ -103,55 +104,164 @@
             transform: translateY(1px);
         }
 
+        /* ── Game Over Container ── */
         .game-over-container {
             display: none;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            position: absolute;
+            justify-content: flex-start;
+            position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
-            margin-bottom: 5px;
-            padding: 30px 40px;
-            background: rgba(20, 20, 30, 0.7);
-            backdrop-filter: blur(15px);
-            border-radius: 20px;
+            padding: 28px 36px;
+            background: rgba(10, 10, 20, 0.85);
+            backdrop-filter: blur(18px);
+            border-radius: 24px;
             border: 2px solid rgba(255, 69, 0, 0.5);
-            box-shadow: 0 10px 40px rgba(255, 69, 0, 0.3);
-            z-index: 2;
-            min-width: 340px;
+            box-shadow: 0 10px 60px rgba(255, 69, 0, 0.3), 0 0 0 1px rgba(255,255,255,0.05);
+            z-index: 10;
+            width: min(700px, 95vw);
+            max-height: 92vh;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0,242,254,0.3) transparent;
         }
         .game-over-container h1 {
             font-family: 'Orbitron', sans-serif;
-            margin: 0 0 15px;
-            font-size: 3rem;
+            margin: 0 0 10px;
+            font-size: 2.8rem;
             color: #ff4d4d;
             text-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000;
             letter-spacing: 3px;
         }
-        .game-over-container p {
-            margin: 0;
+
+        /* WPM Stats Cards */
+        .wpm-stats-row {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 12px 0;
+            width: 100%;
+        }
+        .wpm-stat-card {
+            background: rgba(0, 242, 254, 0.07);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            border-radius: 14px;
+            padding: 12px 18px;
+            min-width: 110px;
+            flex: 1;
+        }
+        .wpm-stat-card .stat-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            color: rgba(255,255,255,0.5);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+        .wpm-stat-card .stat-value {
+            font-family: 'Orbitron', sans-serif;
             font-size: 1.8rem;
+            font-weight: 800;
+            color: #00f2fe;
+            text-shadow: 0 0 12px rgba(0,242,254,0.6);
+        }
+        .wpm-stat-card.accent-orange .stat-value { color: #f2994a; text-shadow: 0 0 12px rgba(242,153,74,0.6); }
+        .wpm-stat-card.accent-green .stat-value { color: #38ef7d; text-shadow: 0 0 12px rgba(56,239,125,0.6); }
+
+        /* WPM Timeline Chart */
+        .wpm-chart-wrap {
+            width: 100%;
+            margin: 10px 0;
+            background: rgba(0,0,0,0.3);
+            border-radius: 14px;
+            border: 1px solid rgba(0, 242, 254, 0.2);
+            padding: 12px;
+            box-sizing: border-box;
+        }
+        .wpm-chart-wrap h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.6);
+            margin: 0 0 8px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        #wpm-timeline-canvas {
+            width: 100%;
+            height: 120px;
+            display: block;
+            border-radius: 8px;
+        }
+
+        /* Score & leaderboard row */
+        .score-lb-row {
+            display: flex;
+            gap: 14px;
+            width: 100%;
+            margin: 8px 0;
+            align-items: flex-start;
+        }
+        .final-score-box {
+            flex: 1;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 12px;
+            padding: 10px 14px;
+        }
+        .final-score-box p {
+            margin: 0;
+            font-size: 1.3rem;
             font-family: 'Orbitron', sans-serif;
             color: #00f2fe;
             text-shadow: 0 0 10px #00f2fe;
         }
+        #leaderboard-section {
+            flex: 1;
+            margin: 0;
+            text-align: left;
+            background: rgba(0,0,0,0.4);
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+        #leaderboard-section h3 {
+            margin: 0 0 8px 0;
+            color: #FFD700;
+            text-align: center;
+            text-shadow: 0 0 5px #FFD700;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        #leaderboard-list {
+            margin: 0;
+            padding-left: 18px;
+            color: white;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+        }
+
         .game-over-buttons {
             display: flex;
-            gap: 18px;
-            margin-top: 25px;
+            gap: 12px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
         .game-over-buttons button {
             font-family: 'Orbitron', sans-serif;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
-            padding: 12px 24px;
+            padding: 11px 20px;
             cursor: pointer;
             border: none;
             border-radius: 12px;
-            min-width: 140px;
+            min-width: 130px;
             transition: all 0.2s ease;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -166,6 +276,10 @@
             box-shadow: 0 0 15px rgba(67, 67, 67, 0.4);
             border: 1px solid #444;
         }
+        .btn-stats {
+            background: linear-gradient(135deg, #3a7bd5 0%, #00f2fe 100%);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+        }
         .game-over-buttons button:hover {
             transform: translateY(-3px);
             filter: brightness(1.1);
@@ -174,24 +288,49 @@
 </head>
 <body>
     <div id="difficulty-modal" class="modal">
-        <h2>Choose Difficulty</h2>
-        <button class="easy" onclick="startGame('easy')">Easy</button>
-        <button class="medium" onclick="startGame('medium')">Medium</button>
-        <button class="hard" onclick="startGame('hard')">Hard</button>
+        <h2 id="loading-text">Loading Assets...</h2>
     </div>
+
+    <!-- ── Game Over Screen ── -->
     <div id="game-over-container" class="game-over-container">
-        <h1 style="color: red; text-shadow: 0 0 10px red;">GAME OVER</h1>
-        <p id="final-score" style="color: white; margin-bottom: 10px; font-size: 30px;"></p>
-        
-        <div id="leaderboard-section" style="width: 100%; margin-top: 15px; margin-bottom: 15px; text-align: left; background: rgba(0,0,0,0.6); padding: 10px; border-radius: 8px;">
-            <h3 style="margin: 0 0 10px 0; color: #FFD700; text-align: center; text-shadow: 0 0 5px #FFD700;">Top Scores</h3>
-            <ol id="leaderboard-list" style="margin: 0; padding-left: 20px; color: white; font-size: 18px;">
-                <li>Loading...</li>
-            </ol>
+        <h1>GAME OVER</h1>
+
+        <!-- WPM Stats Cards -->
+        <div class="wpm-stats-row">
+            <div class="wpm-stat-card">
+                <div class="stat-label">WPM</div>
+                <div class="stat-value" id="final-wpm">0</div>
+            </div>
+            <div class="wpm-stat-card accent-green">
+                <div class="stat-label">Accuracy</div>
+                <div class="stat-value" id="final-accuracy">0%</div>
+            </div>
+            <div class="wpm-stat-card accent-orange">
+                <div class="stat-label">Peak WPM</div>
+                <div class="stat-value" id="peak-wpm">0</div>
+            </div>
+        </div>
+
+        <!-- WPM Timeline Chart -->
+        <div class="wpm-chart-wrap">
+            <h3>WPM Over Time</h3>
+            <canvas id="wpm-timeline-canvas"></canvas>
+        </div>
+
+        <!-- Score + Leaderboard -->
+        <div class="score-lb-row">
+            <div class="final-score-box">
+                <p id="final-score"></p>
+            </div>
+            <div id="leaderboard-section">
+                <h3>Top Scores</h3>
+                <ol id="leaderboard-list"><li>Loading...</li></ol>
+            </div>
         </div>
 
         <div class="game-over-buttons">
             <button class="try-again" onclick="restartGame()">Try Again</button>
+            <button class="btn-stats" onclick="window.location.href='/stats'">My Stats</button>
             <button class="exit" onclick="exitGame()">Exit</button>
         </div>
     </div>
@@ -223,6 +362,16 @@
         let currentDifficulty = "easy";
         let availableWords = [];
 
+        // ── WPM Tracking ──
+        let gameStartTime = null;
+        let wordsTyped = 0;          // total correct words
+        let totalCharsTyped = 0;     // for accuracy
+        let totalCharsCorrect = 0;
+        let wpmTimeline = [];        // [{time, wpm}] every 5s
+        let wpmSnapshotInterval = null;
+        let lastSnapshotWordsTyped = 0;
+        let lastSnapshotTime = 0;
+
         // Audio variables
         let menuMusic;
         let gameMusic;
@@ -246,48 +395,45 @@
         function preload() {
             rocketFlames = loadImage('static/igor-schteinberg-cartoon-rocke-unscreen.gif');
             spaceBg = loadImage('static/supawork-d6eaa225fbe34a529710cb81ab131702.gif');
-            
-            // Load audio files
             menuMusic = loadSound('static/space-chords-loop-310493.mp3');
             gameMusic = loadSound('static/star-wars-style-battle-music-148641.mp3');
             gameOverSound = loadSound('static/mario_world_ending.mp3');
-            explosionSound = loadSound('static/laser-gun-105781.mp3'); 
+            explosionSound = loadSound('static/laser-gun-105781.mp3');
         }
 
         function setup() {
             let cnv = createCanvas(800, 600);
+            cnv.id('p5-game-canvas');
             cnv.parent(document.body);
             cnv.style('display', 'none');
             cnv.style('margin', 'auto');
             rocketX = width / 2;
             textFont('Orbitron');
             textSize(24);
-            
-            // Start menu music
-            menuMusic.loop();
-            currentAudio = menuMusic;
-            
-            // Prevent space bar from scrolling page
             window.addEventListener('keydown', function(e) {
                 if(e.keyCode == 32 && e.target == document.body) {
                     e.preventDefault();
                 }
             });
+            document.getElementById("difficulty-modal").innerHTML = `
+                <h2>Choose Difficulty</h2>
+                <button class="easy" onclick="startGame('easy')">Easy</button>
+                <button class="medium" onclick="startGame('medium')">Medium</button>
+                <button class="hard" onclick="startGame('hard')">Hard</button>
+            `;
         }
 
         function startGame(difficulty) {
+            if (typeof userStartAudio === 'function') userStartAudio();
             currentDifficulty = difficulty;
             document.getElementById("difficulty-modal").style.display = "none";
-            let cnv = document.querySelector("canvas");
-            cnv.style.display = "block";
-            
-            // Switch to game music
-            if (currentAudio) {
-                currentAudio.stop();
-            }
+            let cnv = document.getElementById("p5-game-canvas");
+            if(cnv) cnv.style.display = "block";
+
+            if (currentAudio) currentAudio.stop();
             gameMusic.loop();
             currentAudio = gameMusic;
-            
+
             // Reset game state
             availableWords = [...everydayWords];
             words = [];
@@ -297,6 +443,15 @@
             scoreSubmitted = false;
             timer = 60;
             userInput = "";
+
+            // Reset WPM tracking
+            wordsTyped = 0;
+            totalCharsTyped = 0;
+            totalCharsCorrect = 0;
+            wpmTimeline = [];
+            lastSnapshotWordsTyped = 0;
+            lastSnapshotTime = 0;
+            gameStartTime = Date.now();
 
             if (difficulty === "easy") {
                 wordSpawnRate = 2000;
@@ -312,13 +467,43 @@
             clearInterval(timerInterval);
             setInterval(spawnWord, wordSpawnRate);
             timerInterval = setInterval(updateTimer, 1000);
+
+            // WPM snapshot every 5 seconds
+            if (wpmSnapshotInterval) clearInterval(wpmSnapshotInterval);
+            wpmSnapshotInterval = setInterval(takeWpmSnapshot, 5000);
         }
 
+        // ── WPM helpers ──
+        function getCurrentWpm() {
+            if (!gameStartTime) return 0;
+            let elapsedMinutes = (Date.now() - gameStartTime) / 60000;
+            if (elapsedMinutes < 0.001) return 0;
+            return Math.round(wordsTyped / elapsedMinutes);
+        }
+
+        function takeWpmSnapshot() {
+            if (gameOver || !gameStartTime) return;
+            let elapsed = (Date.now() - gameStartTime) / 1000; // seconds
+            let wpm = getCurrentWpm();
+            wpmTimeline.push({ time: Math.round(elapsed), wpm: wpm });
+            lastSnapshotWordsTyped = wordsTyped;
+            lastSnapshotTime = elapsed;
+        }
+
+        function getAccuracy() {
+            if (totalCharsTyped === 0) return 100;
+            return Math.round((totalCharsCorrect / totalCharsTyped) * 100);
+        }
+
+        function getPeakWpm() {
+            if (wpmTimeline.length === 0) return getCurrentWpm();
+            return Math.max(...wpmTimeline.map(p => p.wpm), getCurrentWpm());
+        }
+
+        // ── Draw loop ──
         function draw() {
             background(spaceBg);
-            
             image(rocketFlames, rocketX - 175, rocketY - 110, rocketWidth, rocketHeight);
-            
             stroke(255, 0, 0);
             line(0, borderY, width, borderY);
             noStroke();
@@ -327,17 +512,32 @@
                 if (!scoreSubmitted) {
                     scoreSubmitted = true;
                     clearInterval(timerInterval);
-                    
+                    clearInterval(wpmSnapshotInterval);
+
+                    // Final snapshot
+                    takeWpmSnapshot();
+
+                    let finalWpm = getCurrentWpm();
+                    let accuracy = getAccuracy();
+                    let peakWpm = getPeakWpm();
+
+                    // Populate game-over UI
                     document.getElementById("game-over-container").style.display = "flex";
-                    document.getElementById("final-score").innerText = `Your Score: ${score}`;
-                    
-                    // Submit score and fetch leaderboard
+                    document.getElementById("final-score").innerText = `Score: ${score} words`;
+                    document.getElementById("final-wpm").innerText = finalWpm;
+                    document.getElementById("final-accuracy").innerText = accuracy + "%";
+                    document.getElementById("peak-wpm").innerText = peakWpm;
+
+                    // Draw timeline chart
+                    setTimeout(() => drawWpmChart(), 100);
+
+                    // Submit score
                     fetch('/submit_score', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ score: score })
                     })
-                    .then(response => response.json())
+                    .then(r => r.json())
                     .then(data => {
                         let lbList = document.getElementById("leaderboard-list");
                         lbList.innerHTML = '';
@@ -352,12 +552,22 @@
                         }
                     })
                     .catch(err => console.error("Leaderboard error:", err));
-                    
+
+                    // Submit WPM
+                    fetch('/submit_wpm', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            wpm: finalWpm,
+                            accuracy: accuracy,
+                            difficulty: currentDifficulty,
+                            words_typed: wordsTyped
+                        })
+                    }).catch(err => console.error("WPM submit error:", err));
+
                     // Play game over sound
                     if (currentAudio !== gameOverSound) {
-                        if (currentAudio) {
-                            currentAudio.stop();
-                        }
+                        if (currentAudio) currentAudio.stop();
                         gameOverSound.play();
                         currentAudio = gameOverSound;
                     }
@@ -365,12 +575,18 @@
                 return;
             }
 
+            // ── HUD ──
+            let liveWpm = getCurrentWpm();
             fill(255);
+            textSize(20);
             text(`Score: ${score}`, 10, 30);
             text(`Lives: ${"❤️".repeat(lives)}`, 10, 60);
             text(`Type: ${userInput}`, 10, 90);
             text(`Time: ${timer}s`, 10, 120);
-            
+
+            // WPM HUD badge (top right)
+            drawWpmBadge(liveWpm);
+
             if (targetX !== null) {
                 if (abs(rocketX - targetX) < 2) {
                     rocketX = targetX;
@@ -379,22 +595,19 @@
                     rocketX += (targetX - rocketX) * 0.1;
                 }
             }
-            
+
             for (let i = words.length - 1; i >= 0; i--) {
                 words[i].y += speed;
-                
                 let wordText = words[i].text;
                 drawingContext.shadowBlur = 8;
                 drawingContext.shadowColor = 'white';
-                
+
                 if (userInput.length > 0 && wordText.toLowerCase().startsWith(userInput.toLowerCase())) {
                     let typedPart = wordText.substring(0, userInput.length);
                     let restPart = wordText.substring(userInput.length);
-                    
                     fill('#00f2fe');
                     drawingContext.shadowColor = '#00f2fe';
                     text(typedPart, words[i].x, words[i].y);
-                    
                     fill(255);
                     drawingContext.shadowColor = 'white';
                     text(restPart, words[i].x + textWidth(typedPart), words[i].y);
@@ -403,17 +616,15 @@
                     text(wordText, words[i].x, words[i].y);
                 }
                 drawingContext.shadowBlur = 0;
-                
+
                 if (words[i].y > borderY) {
                     words.splice(i, 1);
                     lives--;
                     shakeScreen();
-                    if (lives <= 0) {
-                        gameOver = true;
-                    }
+                    if (lives <= 0) gameOver = true;
                 }
             }
-            
+
             for (let i = lasers.length - 1; i >= 0; i--) {
                 stroke(0, 242, 254);
                 strokeWeight(5);
@@ -428,7 +639,7 @@
                 lasers[i].lifetime--;
                 if (lasers[i].lifetime <= 0) lasers.splice(i, 1);
             }
-            
+
             for (let i = explosions.length - 1; i >= 0; i--) {
                 drawingContext.shadowBlur = 20;
                 drawingContext.shadowColor = '#00f2fe';
@@ -437,17 +648,153 @@
                 strokeWeight(3);
                 let radius = 60 - explosions[i].lifetime * 2;
                 circle(explosions[i].x, explosions[i].y, radius);
-                
                 drawingContext.shadowColor = '#fff';
                 stroke(255, 255, 255, explosions[i].lifetime * 12);
                 strokeWeight(1);
                 circle(explosions[i].x, explosions[i].y, radius - 10);
-                
                 noStroke();
                 drawingContext.shadowBlur = 0;
                 explosions[i].lifetime--;
                 if (explosions[i].lifetime <= 0) explosions.splice(i, 1);
             }
+        }
+
+        // ── WPM Badge drawn on-canvas ──
+        function drawWpmBadge(wpm) {
+            // Background pill
+            let bw = 130, bh = 38, bx = width - bw - 10, by = 8;
+            drawingContext.save();
+            drawingContext.fillStyle = 'rgba(0, 242, 254, 0.12)';
+            drawingContext.strokeStyle = 'rgba(0, 242, 254, 0.5)';
+            drawingContext.lineWidth = 1.5;
+            let r = 10;
+            drawingContext.beginPath();
+            drawingContext.moveTo(bx + r, by);
+            drawingContext.lineTo(bx + bw - r, by);
+            drawingContext.quadraticCurveTo(bx + bw, by, bx + bw, by + r);
+            drawingContext.lineTo(bx + bw, by + bh - r);
+            drawingContext.quadraticCurveTo(bx + bw, by + bh, bx + bw - r, by + bh);
+            drawingContext.lineTo(bx + r, by + bh);
+            drawingContext.quadraticCurveTo(bx, by + bh, bx, by + bh - r);
+            drawingContext.lineTo(bx, by + r);
+            drawingContext.quadraticCurveTo(bx, by, bx + r, by);
+            drawingContext.closePath();
+            drawingContext.fill();
+            drawingContext.stroke();
+            drawingContext.restore();
+
+            noStroke();
+            textSize(11);
+            fill(150, 230, 255, 160);
+            textAlign(RIGHT);
+            text('WPM', width - 14, by + 16);
+            textSize(20);
+            fill('#00f2fe');
+            drawingContext.shadowBlur = 10;
+            drawingContext.shadowColor = '#00f2fe';
+            text(wpm, width - 14, by + 33);
+            drawingContext.shadowBlur = 0;
+            textAlign(LEFT);
+            textSize(20);
+        }
+
+        // ── WPM Timeline Chart (HTML Canvas) ──
+        function drawWpmChart() {
+            const cvs = document.getElementById('wpm-timeline-canvas');
+            if (!cvs) return;
+
+            const dpr = window.devicePixelRatio || 1;
+            const w = cvs.offsetWidth;
+            const h = 120;
+            cvs.width = w * dpr;
+            cvs.height = h * dpr;
+            const ctx = cvs.getContext('2d');
+            ctx.scale(dpr, dpr);
+
+            // background
+            ctx.clearRect(0, 0, w, h);
+
+            let data = wpmTimeline.length > 0 ? wpmTimeline : [{time: 0, wpm: 0}, {time: 60, wpm: getCurrentWpm()}];
+            if (data.length < 2) {
+                data = [{time: 0, wpm: 0}, ...data, {time: 60, wpm: getCurrentWpm()}];
+            }
+
+            let maxWpm = Math.max(...data.map(d => d.wpm), 1);
+            let pad = { top: 12, right: 12, bottom: 28, left: 38 };
+            let cw = w - pad.left - pad.right;
+            let ch = h - pad.top - pad.bottom;
+
+            // Grid lines
+            ctx.strokeStyle = 'rgba(255,255,255,0.07)';
+            ctx.lineWidth = 1;
+            for (let i = 0; i <= 4; i++) {
+                let y = pad.top + (ch / 4) * i;
+                ctx.beginPath();
+                ctx.moveTo(pad.left, y);
+                ctx.lineTo(pad.left + cw, y);
+                ctx.stroke();
+                let label = Math.round(maxWpm * (1 - i / 4));
+                ctx.fillStyle = 'rgba(255,255,255,0.35)';
+                ctx.font = '10px Inter';
+                ctx.textAlign = 'right';
+                ctx.fillText(label, pad.left - 4, y + 4);
+            }
+
+            // X-axis labels
+            ctx.fillStyle = 'rgba(255,255,255,0.35)';
+            ctx.font = '10px Inter';
+            ctx.textAlign = 'center';
+            let maxTime = data[data.length - 1].time || 60;
+            for (let s = 0; s <= maxTime; s += 15) {
+                let x = pad.left + (s / maxTime) * cw;
+                ctx.fillText(s + 's', x, h - 6);
+            }
+
+            // Gradient fill under line
+            let grd = ctx.createLinearGradient(0, pad.top, 0, pad.top + ch);
+            grd.addColorStop(0, 'rgba(0,242,254,0.35)');
+            grd.addColorStop(1, 'rgba(0,242,254,0.02)');
+            ctx.fillStyle = grd;
+            ctx.beginPath();
+            ctx.moveTo(pad.left, pad.top + ch);
+            data.forEach((pt, idx) => {
+                let x = pad.left + (pt.time / maxTime) * cw;
+                let y = pad.top + ch - (pt.wpm / maxWpm) * ch;
+                if (idx === 0) ctx.lineTo(x, y);
+                else ctx.lineTo(x, y);
+            });
+            ctx.lineTo(pad.left + (data[data.length-1].time / maxTime) * cw, pad.top + ch);
+            ctx.closePath();
+            ctx.fill();
+
+            // Main line
+            ctx.beginPath();
+            ctx.strokeStyle = '#00f2fe';
+            ctx.lineWidth = 2.5;
+            ctx.lineJoin = 'round';
+            ctx.shadowColor = '#00f2fe';
+            ctx.shadowBlur = 8;
+            data.forEach((pt, idx) => {
+                let x = pad.left + (pt.time / maxTime) * cw;
+                let y = pad.top + ch - (pt.wpm / maxWpm) * ch;
+                if (idx === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            });
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+
+            // Data points
+            data.forEach(pt => {
+                let x = pad.left + (pt.time / maxTime) * cw;
+                let y = pad.top + ch - (pt.wpm / maxWpm) * ch;
+                ctx.beginPath();
+                ctx.arc(x, y, 3.5, 0, Math.PI * 2);
+                ctx.fillStyle = '#00f2fe';
+                ctx.fill();
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+            });
         }
 
         function shootLaser() {
@@ -456,74 +803,58 @@
                 if (words[i].text.toLowerCase() === userInput.toLowerCase()) {
                     let laserStartX = rocketX;
                     let laserStartY = rocketY - rocketHeight/6;
-                    
                     lasers.push({
-                        x1: laserStartX, 
+                        x1: laserStartX,
                         y1: laserStartY,
                         x2: words[i].x + textWidth(words[i].text)/2,
                         y2: words[i].y,
                         lifetime: 10
                     });
-                    explosions.push({ 
-                        x: words[i].x + textWidth(words[i].text)/2, 
-                        y: words[i].y, 
-                        lifetime: 20 
+                    explosions.push({
+                        x: words[i].x + textWidth(words[i].text)/2,
+                        y: words[i].y,
+                        lifetime: 20
                     });
-                    
-                    // Play explosion sound
                     explosionSound.play();
-                    
                     words.splice(i, 1);
                     score++;
+                    wordsTyped++;
+                    totalCharsCorrect += userInput.length;
+                    totalCharsTyped += userInput.length;
                     userInput = "";
                     wordFound = true;
                     break;
                 }
             }
-            
+
             if (!wordFound && userInput.length > 0) {
+                totalCharsTyped += userInput.length; // penalise incorrect attempt
                 shakeScreen();
                 userInput = "";
                 if (currentDifficulty === "medium" || currentDifficulty === "hard") {
                     lives--;
-                    if (lives <= 0) {
-                        gameOver = true;
-                    }
+                    if (lives <= 0) gameOver = true;
                 }
             }
         }
 
         function spawnWord() {
             if (gameOver || availableWords.length === 0) return;
-            
-            if (availableWords.length === 0) {
-                availableWords = [...everydayWords];
-            }
-            
+            if (availableWords.length === 0) availableWords = [...everydayWords];
             const randomIndex = Math.floor(Math.random() * availableWords.length);
             const randomWord = availableWords[randomIndex];
             availableWords.splice(randomIndex, 1);
-            
             let wordWidth = textWidth(randomWord);
             let minX = 20;
             let maxX = width - wordWidth - 20;
-            
             if (maxX < minX) return;
-            
-            words.push({
-                text: randomWord,
-                x: random(minX, maxX),
-                y: 0
-            });
+            words.push({ text: randomWord, x: random(minX, maxX), y: 0 });
         }
 
         function shakeScreen() {
-            let intensity = 10;
-            let duration = 300;
-            let start = Date.now();
+            let intensity = 10, duration = 300, start = Date.now();
             let interval = setInterval(() => {
-                let elapsed = Date.now() - start;
-                if (elapsed > duration) {
+                if (Date.now() - start > duration) {
                     clearInterval(interval);
                     document.body.style.transform = "translate(0, 0)";
                     return;
@@ -536,7 +867,6 @@
 
         function keyPressed() {
             if (gameOver) return;
-            
             if (keyCode === 8) {
                 if (!backspaceInterval) {
                     userInput = userInput.slice(0, -1);
@@ -552,12 +882,11 @@
                     }, backspaceDelay);
                 }
                 return false;
-            } else if (keyCode === 13 || keyCode === 32) {  // Enter or Space
+            } else if (keyCode === 13 || keyCode === 32) {
                 shootLaser();
                 return false;
             } else if (key.length === 1 && key.match(/[a-z]/i)) {
                 userInput += key.toLowerCase();
-                
                 for (let word of words) {
                     if (word.text.toLowerCase().startsWith(userInput.toLowerCase())) {
                         targetX = word.x + textWidth(word.text)/2;
@@ -569,13 +898,9 @@
 
         function keyReleased() {
             if (keyCode === 8 && backspaceInterval) {
-                if (backspaceInterval) {
-                    clearTimeout(backspaceInterval);
-                    if (typeof backspaceInterval === 'number') {
-                        clearInterval(backspaceInterval);
-                    }
-                    backspaceInterval = null;
-                }
+                clearTimeout(backspaceInterval);
+                if (typeof backspaceInterval === 'number') clearInterval(backspaceInterval);
+                backspaceInterval = null;
             }
         }
 
@@ -589,16 +914,12 @@
         }
 
         function restartGame() {
-            if (currentAudio) {
-                currentAudio.stop();
-            }
+            if (currentAudio) currentAudio.stop();
             location.reload();
         }
 
         function exitGame() {
-            if (currentAudio) {
-                currentAudio.stop();
-            }
+            if (currentAudio) currentAudio.stop();
             window.history.back();
         }
     </script>
