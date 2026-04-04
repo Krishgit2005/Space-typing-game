@@ -39,3 +39,4 @@ python ship.py
 
 - Assets are served from `/static/`.
 - The game uses p5.js in the browser.
+  Addeing feature of multiplayers
